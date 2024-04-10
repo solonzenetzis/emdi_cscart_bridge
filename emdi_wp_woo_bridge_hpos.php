@@ -88,6 +88,8 @@ if ($action == 'productsok') {
 	fclose($Handle); 	
 }
 
+
+/// CUSTOMERS (HPOS COMPATIBLE)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 if ($action == 'customers') {
 	
@@ -105,32 +107,27 @@ if ($action == 'customers') {
 	//members
 	$query="SELECT 
 		
-		pst1.post_id as user_id,
-		(select pst2.meta_value from ".$dbprefix."postmeta pst2 where pst1.post_id=pst2.post_id and pst2.meta_key='_billing_address_1') as b_address,
-		(select pst2.meta_value from ".$dbprefix."postmeta pst2 where pst1.post_id=pst2.post_id and pst2.meta_key='_billing_address_2') as c_address,
-		(select pst2.meta_value from ".$dbprefix."postmeta pst2 where pst1.post_id=pst2.post_id and pst2.meta_key='_billing_city') as b_city,
-		
-		(select pst2.meta_value from ".$dbprefix."postmeta pst2 where pst1.post_id=pst2.post_id and pst2.meta_key='_billing_country'),
-		(select pst2.meta_value from ".$dbprefix."postmeta pst2 where pst1.post_id=pst2.post_id and pst2.meta_key='_billing_email') as email,
-		(select pst2.meta_value from ".$dbprefix."postmeta pst2 where pst1.post_id=pst2.post_id and pst2.meta_key='_billing_first_name') as firstname,
-		(select pst2.meta_value from ".$dbprefix."postmeta pst2 where pst1.post_id=pst2.post_id and pst2.meta_key='_billing_last_name') as lastname,
-		(select pst2.meta_value from ".$dbprefix."postmeta pst2 where pst1.post_id=pst2.post_id and pst2.meta_key='_billing_phone') as phone,
-		(select pst2.meta_value from ".$dbprefix."postmeta pst2 where pst1.post_id=pst2.post_id and pst2.meta_key='_billing_postcode') as b_zipcode,
-		(select pst2.meta_value from ".$dbprefix."postmeta pst2 where pst1.post_id=pst2.post_id and pst2.meta_key='_billing_state') as b_state,
-		(select pst2.meta_value from ".$dbprefix."postmeta pst2 where pst1.post_id=pst2.post_id and pst2.meta_key='_billing_vat') as afm,
-		(select pst2.meta_value from ".$dbprefix."postmeta pst2 where pst1.post_id=pst2.post_id and pst2.meta_key='_billing_irs') as doy,
-		(select pst2.meta_value from ".$dbprefix."postmeta pst2 where pst1.post_id=pst2.post_id and pst2.meta_key='_billing_company') as company,
-		(select pst2.meta_value from ".$dbprefix."postmeta pst2 where pst1.post_id=pst2.post_id and pst2.meta_key='_billing_store') as epaggelma,
-		
-		(SELECT pop.post_date FROM ".$dbprefix."posts pop where pop.ID=pst1.post_id) as dd
-		
-		FROM ".$dbprefix."postmeta pst1
-		where
-		pst1.meta_key='_customer_user'
-		and
-		(select pst2.meta_value from ".$dbprefix."postmeta pst2 where pst1.post_id=pst2.post_id and pst2.meta_key='_customer_user')=0
-		and  
-		(SELECT pop.post_date FROM ".$dbprefix."posts pop where pop.ID=pst1.post_id) >'".$lastdate."'
+pst1.id as user_id,
+(select pst2.address_1 from ".$dbprefix."wc_order_addresses pst2 where pst1.id=pst2.order_id and pst2.address_type='billing') as b_address,
+(select pst2.address_1 from ".$dbprefix."wc_order_addresses pst2 where pst1.id=pst2.order_id and pst2.address_type='shipping') as c_address,
+(select pst2.city from ".$dbprefix."wc_order_addresses pst2 where pst1.id=pst2.order_id and pst2.address_type='billing') as b_city,
+(select pst2.company from ".$dbprefix."wc_order_addresses pst2 where pst1.id=pst2.order_id and pst2.address_type='billing') as company,
+(select pst2.country from ".$dbprefix."wc_order_addresses pst2 where pst1.id=pst2.order_id and pst2.address_type='billing') as b_country,
+(select pst2.email from ".$dbprefix."wc_order_addresses pst2 where pst1.id=pst2.order_id and pst2.address_type='billing') as email,
+(select pst2.first_name from ".$dbprefix."wc_order_addresses pst2 where pst1.id=pst2.order_id and pst2.address_type='billing') as firstname,
+(select pst2.last_name from ".$dbprefix."wc_order_addresses pst2 where pst1.id=pst2.order_id and pst2.address_type='billing') as lastname,
+(select pst2.phone from ".$dbprefix."wc_order_addresses pst2 where pst1.id=pst2.order_id and pst2.address_type='billing') as phone,
+(select pst2.postcode from ".$dbprefix."wc_order_addresses pst2 where pst1.id=pst2.order_id and pst2.address_type='billing') as postcode,
+(select pst2.state from ".$dbprefix."wc_order_addresses pst2 where pst1.id=pst2.order_id and pst2.address_type='billing') as b_state,
+(select pst3.meta_value from ".$dbprefix."wc_orders_meta pst3 where pst1.id=pst3.order_id and pst3.meta_key='billing_occupation') as epaggelma,
+(select pst3.meta_value from ".$dbprefix."wc_orders_meta pst3 where pst1.id=pst3.order_id and pst3.meta_key='afm') as afm,
+(select pst3.meta_value from ".$dbprefix."wc_orders_meta pst3 where pst1.id=pst3.order_id and pst3.meta_key='doy') as doy
+
+FROM ".$dbprefix."wc_orders pst1
+where
+pst1.customer_id=0
+and  
+pst1.date_created_gmt >'".$lastdate."'
 		
 		
 		";
@@ -178,32 +175,27 @@ if ($action == 'customers') {
 	
 	$query="SELECT 
 		
-		pst1.post_id as user_id,
-		(select pst2.meta_value from ".$dbprefix."postmeta pst2 where pst1.post_id=pst2.post_id and pst2.meta_key='_billing_address_1') as b_address,
-		(select pst2.meta_value from ".$dbprefix."postmeta pst2 where pst1.post_id=pst2.post_id and pst2.meta_key='_billing_address_2') as c_address,
-		(select pst2.meta_value from ".$dbprefix."postmeta pst2 where pst1.post_id=pst2.post_id and pst2.meta_key='_billing_city') as b_city,
-		
-		(select pst2.meta_value from ".$dbprefix."postmeta pst2 where pst1.post_id=pst2.post_id and pst2.meta_key='_billing_country'),
-		(select pst2.meta_value from ".$dbprefix."postmeta pst2 where pst1.post_id=pst2.post_id and pst2.meta_key='_billing_email') as email,
-		(select pst2.meta_value from ".$dbprefix."postmeta pst2 where pst1.post_id=pst2.post_id and pst2.meta_key='_billing_first_name') as firstname,
-		(select pst2.meta_value from ".$dbprefix."postmeta pst2 where pst1.post_id=pst2.post_id and pst2.meta_key='_billing_last_name') as lastname,
-		(select pst2.meta_value from ".$dbprefix."postmeta pst2 where pst1.post_id=pst2.post_id and pst2.meta_key='_billing_phone') as phone,
-		(select pst2.meta_value from ".$dbprefix."postmeta pst2 where pst1.post_id=pst2.post_id and pst2.meta_key='_billing_postcode') as b_zipcode,
-		(select pst2.meta_value from ".$dbprefix."postmeta pst2 where pst1.post_id=pst2.post_id and pst2.meta_key='_billing_state') as b_state,
-		(select pst2.meta_value from ".$dbprefix."postmeta pst2 where pst1.post_id=pst2.post_id and pst2.meta_key='_billing_vat') as afm,
-		(select pst2.meta_value from ".$dbprefix."postmeta pst2 where pst1.post_id=pst2.post_id and pst2.meta_key='_billing_irs') as doy,
-		(select pst2.meta_value from ".$dbprefix."postmeta pst2 where pst1.post_id=pst2.post_id and pst2.meta_key='_billing_company') as company,
-		(select pst2.meta_value from ".$dbprefix."postmeta pst2 where pst1.post_id=pst2.post_id and pst2.meta_key='_billing_store') as epaggelma,
-		
-		(SELECT pop.post_date FROM ".$dbprefix."posts pop where pop.ID=pst1.post_id) as dd
-		
-		FROM ".$dbprefix."postmeta pst1
-		where
-		pst1.meta_key='_customer_user'
-		and
-		(select pst2.meta_value from ".$dbprefix."postmeta pst2 where pst1.post_id=pst2.post_id and pst2.meta_key='_customer_user')>0
-		and  
-		(SELECT pop.post_date FROM ".$dbprefix."posts pop where pop.ID=pst1.post_id) >'".$lastdate."'
+pst1.id as user_id,
+(select pst2.address_1 from ".$dbprefix."wc_order_addresses pst2 where pst1.id=pst2.order_id and pst2.address_type='billing') as b_address,
+(select pst2.address_1 from ".$dbprefix."wc_order_addresses pst2 where pst1.id=pst2.order_id and pst2.address_type='shipping') as c_address,
+(select pst2.city from ".$dbprefix."wc_order_addresses pst2 where pst1.id=pst2.order_id and pst2.address_type='billing') as b_city,
+(select pst2.company from ".$dbprefix."wc_order_addresses pst2 where pst1.id=pst2.order_id and pst2.address_type='billing') as company,
+(select pst2.country from ".$dbprefix."wc_order_addresses pst2 where pst1.id=pst2.order_id and pst2.address_type='billing') as b_country,
+(select pst2.email from ".$dbprefix."wc_order_addresses pst2 where pst1.id=pst2.order_id and pst2.address_type='billing') as email,
+(select pst2.first_name from ".$dbprefix."wc_order_addresses pst2 where pst1.id=pst2.order_id and pst2.address_type='billing') as firstname,
+(select pst2.last_name from ".$dbprefix."wc_order_addresses pst2 where pst1.id=pst2.order_id and pst2.address_type='billing') as lastname,
+(select pst2.phone from ".$dbprefix."wc_order_addresses pst2 where pst1.id=pst2.order_id and pst2.address_type='billing') as phone,
+(select pst2.postcode from ".$dbprefix."wc_order_addresses pst2 where pst1.id=pst2.order_id and pst2.address_type='billing') as postcode,
+(select pst2.state from ".$dbprefix."wc_order_addresses pst2 where pst1.id=pst2.order_id and pst2.address_type='billing') as b_state,
+(select pst3.meta_value from ".$dbprefix."wc_orders_meta pst3 where pst1.id=pst3.order_id and pst3.meta_key='billing_occupation') as epaggelma,
+(select pst3.meta_value from ".$dbprefix."wc_orders_meta pst3 where pst1.id=pst3.order_id and pst3.meta_key='afm') as afm,
+(select pst3.meta_value from ".$dbprefix."wc_orders_meta pst3 where pst1.id=pst3.order_id and pst3.meta_key='doy') as doy
+
+FROM ".$dbprefix."wc_orders pst1
+where
+pst1.customer_id>0
+and  
+pst1.date_created_gmt >'".$lastdate."'
 		
 		
 		";
@@ -499,48 +491,31 @@ if ($action == 'products') {
 	
 	
 }
+
+
+////ORDERS (HPOS COMPATIBLE)
+
+
+
 if ($action == 'orders') {
 	
 	
 	$query="SELECT 
 		
-		pst1.post_id as user_id,
-		pst1.post_id as order_id,
-		(select pst2.meta_value from ".$dbprefix."postmeta pst2 where pst1.post_id=pst2.post_id and pst2.meta_key='_order_shipping') as shipping,
+pst1.id as user_id,
+pst1.id as order_id,
+pst1.customer_note as comment,
+pst1.customer_id as onetime,
+(select pst2.date_created from ".$dbprefix."wc_order_stats pst2 where pst1.id=pst2.order_id) as timestamp,
+(select pst2.shipping_total from ".$dbprefix."wc_order_stats pst2 where pst1.id=pst2.order_id) as shipping
+
+FROM ".$dbprefix."wc_orders pst1
+
+where
+
+pst1.status not in ('wc-completed','wc-cancelled','wc-failed','wc-refunded','trash','wc-')
 		
-		
-			
-			(
-SELECT ori.meta_value FROM `".$dbprefix."woocommerce_order_itemmeta` ori WHERE  ori.meta_key='_fee_amount'
-AND
-ori.order_item_id=
-(SELECT orr.order_item_id FROM `".$dbprefix."woocommerce_order_items` orr WHERE orr.order_id=pst1.post_id
-and orr.order_item_type='fee')
-			
-			)as paymentcost,
-			
-			
-		
-		
-		
-		(SELECT pop.post_excerpt FROM ".$dbprefix."posts pop where pop.ID=pst1.post_id) as comment,
-		(SELECT pop.post_date FROM ".$dbprefix."posts pop where pop.ID=pst1.post_id) as timestamp,
-		
-		
-		(select pst2.meta_value from ".$dbprefix."postmeta pst2 where pst1.post_id=pst2.post_id and pst2.meta_key='_customer_user') as onetime
-		
-		FROM ".$dbprefix."postmeta pst1
-		where
-		pst1.meta_key='_customer_user'
-		
-		and
-		
-		(SELECT pop.post_status FROM ".$dbprefix."posts pop where pop.ID=pst1.post_id) not in ('wc-completed','wc-cancelled','wc-failed','trash','wc-')
-		
-		
-		
-		
-		";
+";
 	//echo $query;
 	
 	
@@ -674,9 +649,13 @@ if ($action == 'order') {
 	
 	
 }
+
+
+//(HPOS COMPATIBLE)
+
 if ($action == 'confirmorder') {
 	//('wc-completed','wc-cancelled
-	$data = mysqli_query($link,"update ".$dbprefix."posts set post_status='wc-completed' where ID in (".$orderid.")") or die(mysqli_error($link));
+	$data = mysqli_query($link,"update ".$dbprefix."wc_orders set status='wc-invoice-done' where id in (".$orderid.")") or die(mysqli_error($link));
 	
 	
 	//ΓΙΑ WP-ROCKET - ΚΑΘΑΡΙΣΜΑ CACHE
@@ -838,11 +817,12 @@ if ($action == 'updatestock') {
 
 
 
+//(HPOS COMPATIBLE)
 
 if ($action == 'cancelorder') {
 	
 	//('wc-completed','wc-cancelled
-	$data = mysqli_query($link,"update ".$dbprefix."posts set post_status='wc-cancelled' where ID in (".$orderid.")") or die(mysqli_error($link));
+	$data = mysqli_query($link,"update ".$dbprefix."wc_orders set status='wc-cancelled' where id in (".$orderid.")") or die(mysqli_error($link));
 	
 	echo $hmera;
 	
