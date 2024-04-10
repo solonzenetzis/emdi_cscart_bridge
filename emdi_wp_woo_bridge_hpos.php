@@ -1,10 +1,10 @@
 <?php
 error_reporting(0);
 /*------------------------------------------------------------------------
-		# EMDI - WordPress Woo BRIDGE by SBZ systems - Solon Zenetzis - version 2
+		# EMDI - WordPress Woo BRIDGE by SBZ Systems - Solon Zenetzis
 		# ------------------------------------------------------------------------
 		# author    SBZ systems - Solon Zenetzis
-		# copyright Copyright (C) 2018 sbzsystems.com. All Rights Reserved.
+		# copyright Copyright (C) 2024 sbzsystems.com. All Rights Reserved.
 		# @license - https://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
 		# Websites: https://www.sbzsystems.com
 		# Technical Support:  Forum - https://www.sbzsystems.com
@@ -136,11 +136,6 @@ pst1.date_created_gmt >'".$lastdate."'
 	$data = mysqli_query($link,$query) or die(mysqli_error($link));
 	
 	
-	
-	
-	
-	
-	
 	/////////////
 	
 	
@@ -155,7 +150,7 @@ pst1.date_created_gmt >'".$lastdate."'
 		$address1=$alldata['b_address'];  	 	
 		$tu=$alldata['c_address']; 
 		
-		$postcode=$alldata['b_zipcode'];  	 
+		$postcode=$alldata['postcode'];  	 
 		$country=$alldata['b_country'];  	 	
 		$state=$alldata['b_state'];  	 	
 		$city=$alldata['b_city'];  	 	
@@ -165,7 +160,7 @@ pst1.date_created_gmt >'".$lastdate."'
 		$companyname=$alldata['company'];  	 	
 		$afm=$alldata['afm'];  	 	
 		$doy=$alldata['doy'];
-        $epaggelma=$alldata['epaggelma'];    	 	
+                $epaggelma=$alldata['epaggelma'];    	 	
 		//		$postcode=$alldata['date_added'];  	 	
 		
 		echo $customer_code_prefix.$id.';'.$firstname.';'.$lastname.';'.$address1.';'.$postcode.';'.';'.$city.';'.$city.';'
@@ -213,7 +208,7 @@ pst1.date_created_gmt >'".$lastdate."'
 		$address1=$alldata['b_address'];  	 	
 		$tu=$alldata['c_address']; 
 		
-		$postcode=$alldata['b_zipcode'];  	 
+		$postcode=$alldata['postcode'];  	 
 		$country=$alldata['b_country'];  	 	
 		$state=$alldata['b_state'];  	 	
 		$city=$alldata['b_city'];  	 	
@@ -223,7 +218,7 @@ pst1.date_created_gmt >'".$lastdate."'
 		$companyname=$alldata['company'];  	 	
 		$afm=$alldata['afm'];  	 	
 		$doy=$alldata['doy'];
-        $epaggelma=$alldata['epaggelma'];   	 	
+                $epaggelma=$alldata['epaggelma'];   	 	
 		//		$postcode=$alldata['date_added'];  	 	
 		
 		echo $onetime_customer_code_prefix.$id.';'.$firstname.';'.$lastname.';'.$address1.';'.$postcode.';'.';'.$city.';'.$city.';'
@@ -340,8 +335,8 @@ if ($action == 'products') {
 		$category= $alldata['category'];
 		$category=str_replace("&amp;","&",$category);		
 		$weight= $alldata['weight'];
-        $stock= $alldata['stock'];
-        $manufacturer= 'Κατασκευαστής:'.$alldata['manufacturer'].'\n';	 		
+                $stock= $alldata['stock'];
+                $manufacturer= 'Κατασκευαστής:'.$alldata['manufacturer'].'\n';	 		
 		$taxrate=$maintax;
 		
 		$priced=$alldata['priced'];
